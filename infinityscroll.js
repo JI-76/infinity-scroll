@@ -1,2 +1,2 @@
-// templatescript.js
+// infinityscroll.js
 
