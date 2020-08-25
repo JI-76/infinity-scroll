@@ -49,7 +49,10 @@ image-container img {
     margin-top: 5px;
 }
 
-/* Media Query: Large Smartphone */
+/* Media Query: Large Smartphone
+Always locate Media Query at bottom of stylesheet to allow it to override everything in the stylesheet.
+Only on screens and on devices <= 1000 px (Tablet or Smaller)
+*/
 @media screen and (max-width: 600px) {
     h1 {
         font-size: 20px;
