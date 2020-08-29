@@ -69,5 +69,16 @@ async function getPhotos() {
     }
 }
 
+// Check to see if user is scrolling near bottom of page; load more photos
+// using the highest class in the DOM heirarchy (parent of HTML Document element)
+// use and Arrow function
+window.addEventListener('scroll', () => {
+    //console.log('scrolled');
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 1000) {
+        getPhotos();
+        console.log('load more');
+    }
+});
+
 // On Load
 getPhotos();
