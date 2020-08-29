@@ -4,16 +4,36 @@
 const imageContainer = document.getElementById('image-container');
 const loader = document.getElementById('loader');
 
+// Support loading of images
+let ready = false;
+let imagesLoaded = 0;
+let totalImages = 0;
+
 let photosArray = [];
 
 // Unsplash API use `` for template string to allow for embedded variables to be used
-const count = 10;
+const count = 30;
 const apiKey = 'eKGid5P_utz9lh_xjo4ADnIWkYaoEOPSbuiNAyvU7R8';
 const apiUrl = `https://api.unsplash.com/photos/random/?client_id=${apiKey}&count=${count}`;
 
 // adding a proxy to avoid the CORS error
 //const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
 const proxyUrl = 'https://pacific-cliffs-73220.herokuapp.com/';
+
+// Check if all images were loaded
+function imageLoaded() {
+    console.log('image loaded');
+    imagesLoaded++;
+    console.log(imagesLoaded);
+
+    // all images loaded
+    if (imagesLoaded === totalImages) {
+        ready = true;
+        // only show loader first time
+        loader.hidden = true;
+        console.log('ready =', ready);
+    }
+}
 
 // Helper Function to set element attributes on DOM Elements
 // DRY - Don't Repeat Yourself
@@ -25,6 +45,10 @@ function setAttributes(element, attributes) {
 
 // Create HTML elemenent for Links and Photos; add to DOM
 function displayPhotos() {
+    imagesLoaded = 0;
+    totalImages = photosArray.length;
+    console.log('total images =', totalImages);
+    
     // Run function for each object in photosArray using arrow function
     photosArray.forEach((photo) => {
         // Create an Anchor element <a> to link to Unsplash API server
@@ -46,6 +70,9 @@ function displayPhotos() {
             alt: photo.alt_description,
             title: photo.alt_description,
         });
+
+        // Event Listener: check when each is finished loading
+        img.addEventListener('load', imageLoaded)
 
         // Put Image element <img> inside Anchor element <a>; then place both inside Div child element <div> class="image-container"
         item.appendChild(img);
@@ -74,9 +101,10 @@ async function getPhotos() {
 // use and Arrow function
 window.addEventListener('scroll', () => {
     //console.log('scrolled');
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 1000) {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 1000 && ready) {
+        ready = false;
         getPhotos();
-        console.log('load more');
+        //console.log('load more');
     }
 });
 
