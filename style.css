@@ -41,7 +41,7 @@ h1 {
 /* Image Container */
 .image-container {
     /* Top\Bottom: 10 px; Left\Right: 25% margin each side is a total of 50% is margin and remaining 50% is used by the image */
-    margin: 10px 25%;
+    margin: 10px 10%;
 }
 
 image-container img {

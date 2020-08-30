@@ -9,29 +9,43 @@ let ready = false;
 let imagesLoaded = 0;
 let totalImages = 0;
 
+// array for fetched image batch
 let photosArray = [];
 
+// boolean for initial load condition
+let isInitialLoad = true;
+
 // Unsplash API use `` for template string to allow for embedded variables to be used
-const count = 30;
+// size of fetched image batch
+let imageCount = 5;
 const apiKey = 'eKGid5P_utz9lh_xjo4ADnIWkYaoEOPSbuiNAyvU7R8';
-const apiUrl = `https://api.unsplash.com/photos/random/?client_id=${apiKey}&count=${count}`;
+let apiUrl = `https://api.unsplash.com/photos/random/?client_id=${apiKey}&count=${imageCount}`;
 
 // adding a proxy to avoid the CORS error
 //const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
 const proxyUrl = 'https://pacific-cliffs-73220.herokuapp.com/';
 
+// Update apiUrl with new image count
+function updateAPIURLWithNewCount (picCount) {
+    apiUrl = `https://api.unsplash.com/photos/random/?client_id=${apiKey}&count=${picCount}`;
+    console.log('imageCount now =', picCount); // test code; will be commented out later
+}
+
 // Check if all images were loaded
 function imageLoaded() {
-    console.log('image loaded');
     imagesLoaded++;
-    console.log(imagesLoaded);
+    console.log('image loaded =', imagesLoaded); // test code; will be commented out later
+    //console.log(imagesLoaded); // test code; will be commented out later
 
     // all images loaded
     if (imagesLoaded === totalImages) {
         ready = true;
         // only show loader first time
         loader.hidden = true;
-        console.log('ready =', ready);
+        //imageCount = 30;
+        //apiUrl = `https://api.unsplash.com/photos/random/?client_id=${apiKey}&count=${imageCount}`;
+        //console.log('imageCount =', imageCount); // test code; will be commented out later
+        console.log('ready =', ready); // test code; will be commented out later
     }
 }
 
@@ -47,7 +61,7 @@ function setAttributes(element, attributes) {
 function displayPhotos() {
     imagesLoaded = 0;
     totalImages = photosArray.length;
-    console.log('total images =', totalImages);
+    console.log('total images =', totalImages); // test code; will be commented out later
     
     // Run function for each object in photosArray using arrow function
     photosArray.forEach((photo) => {
@@ -87,8 +101,13 @@ async function getPhotos() {
         //const response = await fetch(proxyUrl + apiUrl);
         photosArray = await response.json();
         displayPhotos();
-        //console.log(photosArray); // test code; will be commented out later
 
+        if (isInitialLoad) {
+            updateAPIURLWithNewCount(30);
+            // reset boolean for initial load condition
+            isInitialLoad = false;
+        }
+        //console.log(photosArray); // test code; will be commented out later
         //const data = await response.json(); // test code; will be commented out later
         //console.log(data); // test code; will be commented out later
     } catch (error) {
@@ -104,7 +123,7 @@ window.addEventListener('scroll', () => {
     if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 1000 && ready) {
         ready = false;
         getPhotos();
-        //console.log('load more');
+        //console.log('load more'); // test code; will be commented out later
     }
 });
 
